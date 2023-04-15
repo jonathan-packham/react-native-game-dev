@@ -12,24 +12,28 @@ export default function(entities, {events, dispatch}) {
     if (events.length) {
         events.forEach((e) => {
             switch (e) {
-                case "move-up":
+                case 'move-up':
                     if (head.yspeed === 1) return;
                     head.yspeed = -1;
                     head.xspeed = 0;
                     return;
-                case "move-right":
+                case 'move-right':
                     if (head.xspeed === -1) return;
                     head.xspeed = 1;
                     head.yspeed = 0;
+                    // ToastAndroid.show("move right", ToastAndroid.SHORT);
                     return;
-                case "move-down":
+                case 'move-down':
                     if (head.yspeed === -1) return;
+                    // ToastAndroid.show("move down", ToastAndroid.SHORT);
                     head.yspeed = 1;
                     head.xspeed = 0;
-                case "move-left":
+                    return;
+                case 'move-left':
                     if (head.xspeed === 1) return;
                     head.xspeed = -1;
                     head.yspeed = 0;
+                    // ToastAndroid.show("move left", ToastAndroid.SHORT);
                     return;
             }
         });
