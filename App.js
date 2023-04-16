@@ -48,10 +48,26 @@ export default function App() {
 }
 
 const StartScreen = ({navigation}) => {
-  //const [lastFileAdded, setLastFileAdded] = useState(null);
+  const [currentName, setCurrentName] = useState('');
   const [newSnakeName, setNewSnakeName] = useState('');
-  const [placeholder] = useState('Snake');
+  const [placeholder, setPlaceholder] = useState('Snake');
   
+  const getCurrentSnakeName = async () => {
+    let uri = FileSystem.documentDirectory + 'SnakeName';
+    const file = await FileSystem.readDirectoryAsync(uri)
+    
+    if (!file) {
+      setCurrentName('');
+    } else {
+      let name = '';
+      await FileSystem.readAsStringAsync(
+        uri,
+        name,
+      );
+      setCurrentName(name);
+      setPlaceholder(name);
+    }
+  }
   navigate = (screen, snakeName) => {
     screen = screen;
     snakeName = snakeName;
@@ -87,10 +103,24 @@ const StartScreen = ({navigation}) => {
   )
 }
 
-function GameScreen() {
+const GameScreen = ({route}) => {
   const BoardSize = Constants.GRID_SIZE * Constants.CELL_SIZE;
   const engine = useRef(null);
-  const [isGameRunning, setIsGameRunning] = useState(true);
+  const [isGameRunning, setIsGameRunning] = useState(false);
+  const [snake] = route.params.snakeName;
+
+  const saveSnakeName = async () => {
+    let fileName = 'SnakeName';
+
+    await FileSystem.writeAsStringAsync(
+      FileSystem.documentDirectory + fileName,
+      snake,
+    )
+  }
+
+  useEffect(() => {
+    saveSnakeName;
+  }, [])
 
   const randomPositions = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
